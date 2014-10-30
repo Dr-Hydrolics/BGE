@@ -42,6 +42,9 @@
     <Filter Include="Prefabs">
       <UniqueIdentifier>{697651d2-0cd7-45c2-b4a6-56fe6f15526c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PLaying around">
+      <UniqueIdentifier>{3a64f41f-cace-4b62-929f-1ac169faf8a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

@@ -227,6 +227,12 @@
     <ClCompile Include="Lab7.cpp">
       <Filter>Labs</Filter>
     </ClCompile>
+    <ClCompile Include="Animat.cpp">
+      <Filter>Games</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonMovement.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -406,6 +412,10 @@
     <ClInclude Include="Lab7.h">
       <Filter>Labs</Filter>
     </ClInclude>
+    <ClInclude Include="Animat.h">
+      <Filter>Games</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonMovement.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\CubeShader.fragmentshader">

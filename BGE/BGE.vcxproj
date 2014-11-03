@@ -99,9 +99,11 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animat.cpp" />
     <ClCompile Include="AttackingState.cpp" />
     <ClCompile Include="Buddha.cpp" />
     <ClCompile Include="Capsule.cpp" />
+    <ClCompile Include="DragonMovement.cpp" />
     <ClCompile Include="FlockingScenario.cpp" />
     <ClCompile Include="FountainEffect.cpp" />
     <ClCompile Include="IdleState.cpp" />
@@ -161,9 +163,11 @@
     <ClCompile Include="XBoxController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animat.h" />
     <ClInclude Include="AttackingState.h" />
     <ClInclude Include="Buddha.h" />
     <ClInclude Include="Capsule.h" />
+    <ClInclude Include="DragonMovement.h" />
     <ClInclude Include="FlockingScenario.h" />
     <ClInclude Include="FountainEffect.h" />
     <ClInclude Include="IdleState.h" />

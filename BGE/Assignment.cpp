@@ -1,4 +1,10 @@
 #include "Assignment.h"
+#include "Utils.h"
+#include <vector>
+std::vector<btHingeConstraint *> hinges;
+std::vector<bool> dirs;
+
+
 using namespace BGE;
 	
 	BGE::Assignment::Assignment(void)
@@ -8,20 +14,25 @@ using namespace BGE;
 	
 	GameComponent GameManager;
 	
+	//btHingeConstraint john[10];
 	
 	bool BGE::Assignment::Initialise(){
 		SetGround(make_shared<Ground>());
-		setGravity(glm::vec3(0, 0, 0));
+		setGravity(glm::vec3(0, -9.8, 0));
 		physicsFactory->CreateCameraPhysics();
 		physicsFactory->CreateGroundPhysics();
 		GameManager = new GameComponent();
-		createDragon();
-		//createAnimat();
+		
+		//createDragon();
+		createAnimat();
 		//createPyramidyThing();
+
 		return Game::Initialise();
 	}
 	
-	
+	void BGE::Assignment::addsound(){
+		
+	}
 	void BGE::Assignment::createPyramidyThing(){
 		int i, j, k;
 		int l = 50;
@@ -44,6 +55,8 @@ using namespace BGE;
 		loc = 20;
 		height = 30;
 		animatBody = physicsFactory->CreateSphere(size, glm::vec3(loc, (height-5), 20), glm::quat(), false, true);
+		animatBody->transform->diffuse = glm::vec3(0, 42, 76);
+		
 		shared_ptr<PhysicsController>bodyPart, lastBodyPart, wingBodyPart;
 		lastBodyPart = animatBody;
 		
@@ -59,22 +72,29 @@ using namespace BGE;
 		
 		/*glm::quat q = glm::angleAxis(45.f, glm::vec3(1, 0, 0));
 		shared_ptr<PhysicsController> Leg = physicsFactory->CreateCylinder(1, 10, glm::vec3(loc, height, 25), glm::quat(), false, true);
-*/
+*/	
+		
 		for (i = 0; i < 10; i++){
-
+			
 			loc += (size + 1);
 
 			bodyPart = physicsFactory->CreateSphere(size, glm::vec3(loc, height, 25), glm::quat(), false, true);
+			
 			btHingeConstraint * hinge = new btHingeConstraint(*lastBodyPart->rigidBody, *bodyPart->rigidBody, btVector3((size), 0, 0), btVector3(-(size), 0, 0), btVector3(0, 0, 1), btVector3(0, 0, 1), true);
-			if (i == 1||i==3||i==5||i==7||i==9 ){
-				hinge->enableAngularMotor(true, -100, 100);
+			//john[i] = *hinge;
+			hinges.push_back(hinge);
+			
+			if (i%2 ==0){
+				dirs.push_back(true);
+				bodyPart->transform->diffuse = glm::vec3(1, 0, 1);
 			}
 			else{
-				hinge->enableAngularMotor(true, 100, 100);
+				dirs.push_back(false);
+				bodyPart->transform->diffuse = glm::vec3(0, 1, 0);
 			}
 			dynamicsWorld->addConstraint(hinge);
 		
-			if (i == 3){
+				if (i == 3){
 				
 			}
 			lastBodyPart = bodyPart;
@@ -101,20 +121,81 @@ using namespace BGE;
 		
 			lastbit = legpiece;
 			
-		for (int i = 0; i < 2; i++){
-			loc.y = loc.y - 3;
-			loc.z = loc.z - 3;
+		for (int i = 0; i < 10; i++){
+			loc.y = loc.y - 4;
+			loc.z = loc.z - 4;
 			tempLeg = physicsFactory->CreateSphere(2,loc, glm::quat(), false, true);
 			thisbit = tempLeg;
-			//btFixedConstraint *lock = new btFixedConstraint(lastbit->rigidBody,thisbit->rigidBody,lastbit->transform,thisbit->transform);
+			btTransform thisBitstransform, lastBittransform;
+			thisBitstransform.setIdentity();
+			lastBittransform.setIdentity();
+			thisBitstransform.setOrigin(GLToBtVector(loc));
+			lastBittransform.setOrigin(GLToBtVector(loc));
+			btFixedConstraint *lock = new btFixedConstraint(*thisbit->rigidBody, *lastbit->rigidBody, thisbit->rigidBody->getWorldTransform(), lastbit->rigidBody->getWorldTransform());
+				//*thisbit->rigidBody, *lastbit->rigidBody, thisbit->rigidBody, lastbit->rigidBody);
+			dynamicsWorld->addConstraint(lock);
+			lastbit = thisbit;
+
 		}
-		loc.y = loc .y- 4;
+		loc.y = loc .y- 5;
 		tempLeg = physicsFactory->CreateSphere(2, loc, glm::quat(), false, true);
-		loc.y = loc.y - 4;
+		loc.y = loc.y - 5;
 		tempLeg = physicsFactory->CreateBox(3, 1, 3, loc, glm::quat(), false, true);
+	
 	}
+	bool dir = true;
+	float total = 0;
+	float colourtoat;
 
 
-	
-	
+	void BGE::Assignment::Update(){
+		float x;
+
+
+
+
+		float adam = Time::deltaTime;
+		total += adam;
+		
+
+
+			
+
+			if (total > 2){
+
+				for (int i = 0; i < hinges.size(); i++)
+				{
+					dir = dirs[i];
+					if (dir == true){
+						x = 100;
+						dirs[i] = dir;
+					}
+					else
+					{
+						x = -100;
+						dirs[i] = dir;
+					}
+					btHingeConstraint * hinge = hinges[i];
+					hinge->enableAngularMotor(true, x, 100);
+					hinges[i] = hinge;
+				}
+				total = 0;
+			}
+			if (dir == true){
+				dir = false;
+			}
+			else{
+				dir = true;
+
+			}
+
+
+			Game::Update();
+		}
+
+
+
+
+
+
 

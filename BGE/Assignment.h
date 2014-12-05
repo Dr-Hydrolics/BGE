@@ -1,5 +1,8 @@
 #pragma once
 #include "Game.h"
+#include <memory>
+#include "PhysicsController.h"
+#include "GameComponent.h"
 namespace BGE{
 	class Assignment :
 		public Game{
@@ -13,6 +16,8 @@ namespace BGE{
 		void createAnimat();	
 		void createDragon();
 		void createLeg();
+		void addsound();
+		void Update();
 	};
 }
 

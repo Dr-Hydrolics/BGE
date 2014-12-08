@@ -74,7 +74,7 @@ using namespace BGE;
 		shared_ptr<PhysicsController> Leg = physicsFactory->CreateCylinder(1, 10, glm::vec3(loc, height, 25), glm::quat(), false, true);
 */	
 		
-		for (i = 0; i < 10; i++){
+		for (i = 0; i < 500; i++){
 			
 			loc += (size + 1);
 

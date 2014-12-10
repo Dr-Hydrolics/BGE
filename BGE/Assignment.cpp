@@ -5,6 +5,7 @@ std::vector<btHingeConstraint *> hinges;
 std::vector<bool> dirs;
 
 
+
 using namespace BGE;
 	
 	BGE::Assignment::Assignment(void)
@@ -18,13 +19,19 @@ using namespace BGE;
 	
 	bool BGE::Assignment::Initialise(){
 		SetGround(make_shared<Ground>());
-		setGravity(glm::vec3(0, -9.8, 0));
+		setGravity(glm::vec3(0, 0, 0));
 		physicsFactory->CreateCameraPhysics();
 		physicsFactory->CreateGroundPhysics();
 		GameManager = new GameComponent();
 		
 		//createDragon();
-		createAnimat();
+		/*for (int i = 0; i < 25; i += 5)
+		{
+
+			createAnimat(i);
+		}
+		*/
+		createAnimat(5);
 		//createPyramidyThing();
 
 		return Game::Initialise();
@@ -48,14 +55,14 @@ using namespace BGE;
 		}
 	}
 	
-	void BGE::Assignment::createAnimat(){
+	void BGE::Assignment::createAnimat(int a){
 		
 		int i,loc,size,height;
 		size = 2;
 		loc = 20;
 		height = 30;
-		animatBody = physicsFactory->CreateSphere(size, glm::vec3(loc, (height-5), 20), glm::quat(), false, true);
-		animatBody->transform->diffuse = glm::vec3(0, 42, 76);
+		animatBody = physicsFactory->CreateSphere(size, glm::vec3(loc, (height-5), a-5), glm::quat(), false, true);
+		animatBody->transform->diffuse = glm::vec3((1.0f / 255)*(a*17), (1.0f / 255) * (a * 10), (1.0f / 255) * 76);
 		
 		shared_ptr<PhysicsController>bodyPart, lastBodyPart, wingBodyPart;
 		lastBodyPart = animatBody;
@@ -73,26 +80,30 @@ using namespace BGE;
 		/*glm::quat q = glm::angleAxis(45.f, glm::vec3(1, 0, 0));
 		shared_ptr<PhysicsController> Leg = physicsFactory->CreateCylinder(1, 10, glm::vec3(loc, height, 25), glm::quat(), false, true);
 */	
+		int numofparts = 500.0f;
+		float color_step, col;
+		color_step = 1.0f/numofparts;
+		for (i = 0; i < numofparts; i++){
 		
-		for (i = 0; i < 500; i++){
 			
 			loc += (size + 1);
 
-			bodyPart = physicsFactory->CreateSphere(size, glm::vec3(loc, height, 25), glm::quat(), false, true);
-			
+			bodyPart = physicsFactory->CreateSphere(size, glm::vec3(loc, height, a), glm::quat(), false, true);
 			btHingeConstraint * hinge = new btHingeConstraint(*lastBodyPart->rigidBody, *bodyPart->rigidBody, btVector3((size), 0, 0), btVector3(-(size), 0, 0), btVector3(0, 0, 1), btVector3(0, 0, 1), true);
 			//john[i] = *hinge;
 			hinges.push_back(hinge);
-			
 			if (i%2 ==0){
 				dirs.push_back(true);
-				bodyPart->transform->diffuse = glm::vec3(1, 0, 1);
+				
+				bodyPart->transform->diffuse = glm::vec3(col, (1 / 255)*(a),col);
 			}
 			else{
 				dirs.push_back(false);
-				bodyPart->transform->diffuse = glm::vec3(0, 1, 0);
+				bodyPart->transform->diffuse = glm::vec3(col, (1 / 255)*(a),col);
 			}
+			col += color_step;
 			dynamicsWorld->addConstraint(hinge);
+			
 		
 				if (i == 3){
 				
@@ -165,6 +176,7 @@ using namespace BGE;
 
 				for (int i = 0; i < hinges.size(); i++)
 				{
+					
 					dir = dirs[i];
 					if (dir == true){
 						x = 100;

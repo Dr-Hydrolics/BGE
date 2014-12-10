@@ -13,7 +13,7 @@ namespace BGE{
 		
 		bool Initialise();
 		void createPyramidyThing();
-		void createAnimat();	
+		void createAnimat(int a);	
 		void createDragon();
 		void createLeg();
 		void addsound();
